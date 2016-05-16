@@ -12,10 +12,7 @@ When ever you need it, toggle `Show * Stems` from the view menu. There is a shor
 
 ### Examples
 
-![Show Smart Plumblines Demo](https://raw.githubusercontent.com/Mark2Mark/Glyphsapp-Plugins/Screenshots/Screenshots/SmartPlumblines/SmPlL%2012.png?raw=true "Show Smart Plumblines Demo")
-
-![Show Smart Plumblines Demo](https://raw.githubusercontent.com/Mark2Mark/Glyphsapp-Plugins/Screenshots/Screenshots/SmartPlumblines/SmPlL%2013.png?raw=true "Show Smart Plumblines Demo")
-
+![Show Stems](https://github.com/Mark2Mark/Show-Stems/blob/master/Images/Show%20Stems%2001.gif "Show Stems")
 
 ##### TODO
 
