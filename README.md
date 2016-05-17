@@ -14,6 +14,12 @@ When ever you need it, toggle `Show * Stems` from the view menu. There is a shor
 
 ![Show Stems](https://github.com/Mark2Mark/Show-Stems/blob/master/Images/Show%20Stems%2001.gif "Show Stems")
 
+##### Known Issues
+
+- Q: It also highlights matching values *between* path-outlines. Keep/remove?
+- Not sure about rounding values to integers. Perhaps 1 float point is better!? The info would be more accurate, but the stems entered in the palette will be integers anyway.
+- the half xHeight/CapHeight indicator (left triangle) is horizontally a tiny bit off in italics. Cosmetic issue.
+
 ##### TODO
 
 - Make it smarter to recognize non-Latin Settings.
