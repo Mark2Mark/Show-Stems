@@ -247,12 +247,12 @@ class ShowVerticalStems(ReporterPlugin):
 
 
 					else:
-						
 						allStems = []
 						for val in savedMeasurements.items():
 							key, value = val
-							if int(value) == thisDistanceRounded:
-								allStems.append(key[0])
+							if key[:-1] == "V": # pass only vertical dimensions
+								if int(value) == thisDistanceRounded:
+									allStems.append(key[0])
 						text = ", ".join(allStems)
 						
 
