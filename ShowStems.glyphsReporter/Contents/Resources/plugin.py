@@ -23,7 +23,7 @@ import numpy as np
 class ShowVerticalStems(ReporterPlugin):
 
 	def settings(self):
-		self.menuName = Glyphs.localize({'en': u'* Stems', 'de': u'* Stämme'})
+		self.menuName = Glyphs.localize({'en': u'Stems', 'de': u'Stämme'})
 		self.keyboardShortcut = 's'
 		self.keyboardShortcutModifier = NSControlKeyMask | NSCommandKeyMask | NSAlternateKeyMask
 
