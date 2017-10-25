@@ -11,8 +11,9 @@ When ever you need it, toggle `Show * Stems` from the view menu. There is a shor
 :point_right: `ctrl+alt+cmd+s` (like **S**tems)
 
 ### Examples
-
+<p align="center"> 
 ![Show Stems](https://github.com/Mark2Mark/Show-Stems/blob/master/Images/Show%20Stems%2001.gif "Show Stems")
+</p>
 
 ##### Known Issues
 
