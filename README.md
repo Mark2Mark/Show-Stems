@@ -12,7 +12,7 @@ When ever you need it, toggle `Show * Stems` from the view menu. There is a shor
 
 ### Examples
 <p align="center">
-<img src="https://github.com/Mark2Mark/Show-Stems/blob/master/Images/Show%20Stems%2001.gif" alt="Show Stems" height="300px">
+<img src="https://github.com/Mark2Mark/Show-Stems/blob/master/Images/Show%20Stems%2001.gif" alt="Show Stems" height="500px">
 </p>
 
 
