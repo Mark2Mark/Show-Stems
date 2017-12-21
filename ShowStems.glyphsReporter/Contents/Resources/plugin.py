@@ -105,31 +105,34 @@ class ShowVerticalStems(ReporterPlugin):
 			letterCase = None
 
 		MeasurementPositionMeasurementLine = NSUserDefaults.standardUserDefaults().floatForKey_("MeasurementPositionMeasurementLine")
-
+		Dimensions = {}
+		savedMeasurements = None
 		try:
 			thisFont = layer.parent.parent
+			Dimensions = thisFont.userData["GSDimensionPlugin.Dimensions"]
 			thisMasterID = thisFont.selectedFontMaster.id
-			savedMeasurements = thisFont.userData["GSDimensionPlugin.Dimensions"][thisMasterID]
+			savedMeasurements = Dimensions[thisMasterID]
 		except:
-			print traceback.format_exc()
-
+			# print traceback.format_exc()
+			pass
+		
 		###### IMPORTANT: convert to int, because the input fields could return objc.unicode or objc.integers.
 		## LC
 		try:
-			savedMeasurements_nV = int(thisFont.userData["GSDimensionPlugin.Dimensions"][thisMasterID]["nV"])
+			savedMeasurements_nV = int(savedMeasurements["nV"])
 		except:
 			savedMeasurements_nV = None
 		try:
-			savedMeasurements_oV = int(thisFont.userData["GSDimensionPlugin.Dimensions"][thisMasterID]["oV"])
+			savedMeasurements_oV = int(savedMeasurements["oV"])
 		except:
 			savedMeasurements_oV = None
 		## UC
 		try:
-			savedMeasurements_HV = int(thisFont.userData["GSDimensionPlugin.Dimensions"][thisMasterID]["HV"])
+			savedMeasurements_HV = int(savedMeasurements["HV"])
 		except:
 			savedMeasurements_HV = None
 		try:
-			savedMeasurements_OV = int(thisFont.userData["GSDimensionPlugin.Dimensions"][thisMasterID]["OV"])
+			savedMeasurements_OV = int(savedMeasurements["OV"])
 		except:
 			savedMeasurements_OV = None
 
