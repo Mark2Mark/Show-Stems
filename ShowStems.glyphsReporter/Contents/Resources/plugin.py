@@ -115,7 +115,7 @@ class ShowVerticalStems(ReporterPlugin):
 		except:
 			# print traceback.format_exc()
 			pass
-		
+
 		###### IMPORTANT: convert to int, because the input fields could return objc.unicode or objc.integers.
 		## LC
 		try:
@@ -174,7 +174,7 @@ class ShowVerticalStems(ReporterPlugin):
 			centerLinePointA, centerLinePointB = (0 + self.italo(linePosY) , linePosY), (xLayerRight + self.italo(linePosY), linePosY) ## same as above, just formatted differently
 			self.drawLine( backlineColor, *centerLine, w=2.5 )
 			self.drawLine( lineColor, *centerLine )
-			
+
 
 			# A) ignoring components
 			# intersectionsBetweenPoints = layer.intersectionsBetweenPoints( centerLinePointA, centerLinePointB )
@@ -224,14 +224,14 @@ class ShowVerticalStems(ReporterPlugin):
 							# self.drawRoundedRectangleForStringAtPosition( " n ", (thisDistanceCenterX, linePosY - shiftY), 10, color=onPathColor )
 							# self.drawRoundedRectangleForStringAtPosition( " o ", (thisDistanceCenterX, linePosY - shiftY*2.8), 10, color=onPathColor )
 							### B) one badges, comma separated
-							self.drawRoundedRectangleForStringAtPosition( " n, o ", (thisDistanceCenterX, linePosY - shiftY), 10, color=onPathColor )							
+							self.drawRoundedRectangleForStringAtPosition( " n, o ", (thisDistanceCenterX, linePosY - shiftY), 10, color=onPathColor )
 						elif thisDistanceRounded == savedMeasurements_nV:
 							self.drawLine( onPathColor, pointA.x, linePosY, pointB.x, linePosY )
 							self.drawRoundedRectangleForStringAtPosition( " n ", (thisDistanceCenterX, linePosY - shiftY), 10, color=onPathColor )
 						elif thisDistanceRounded == savedMeasurements_oV:
 							self.drawLine( onPathColor, pointA.x, linePosY, pointB.x, linePosY )
 							self.drawRoundedRectangleForStringAtPosition( " o ", (thisDistanceCenterX, linePosY - shiftY), 10, color=onPathColor )
-					
+
 					elif letterCase == "Uppercase": # or `if`
 						if thisDistanceRounded == savedMeasurements_HV and thisDistanceRounded == savedMeasurements_OV:
 							self.drawLine( onPathColor, pointA.x, linePosY, pointB.x, linePosY )
@@ -257,7 +257,7 @@ class ShowVerticalStems(ReporterPlugin):
 								if int(value) == thisDistanceRounded:
 									allStems.append(key[0])
 						text = ", ".join(allStems)
-						
+
 
 						if len(allStems) > 0:
 							if len(allStems) == 1:
@@ -312,22 +312,22 @@ class ShowVerticalStems(ReporterPlugin):
 		custom drawTextAtPoint() by Mark.
 		"""
 		try:
-			
+
 			alignment = {
-				'topleft': 6, 
-				'topcenter': 7, 
+				'topleft': 6,
+				'topcenter': 7,
 				'topright': 8,
-				'left': 3, 
-				'center': 4, 
-				'right': 5, 
-				'bottomleft': 0, 
-				'bottomcenter': 1, 
+				'left': 3,
+				'center': 4,
+				'right': 5,
+				'bottomleft': 0,
+				'bottomcenter': 1,
 				'bottomright': 2
 				}
-			
+
 			glyphEditView = self.controller.graphicView()
 			currentZoom = self.getScale()
-			fontAttributes = { 
+			fontAttributes = {
 				NSFontAttributeName: NSFont.labelFontOfSize_(fontSize/currentZoom),
 				NSForegroundColorAttributeName: NSColor.colorWithCalibratedRed_green_blue_alpha_( 1, 1, 1, 1 ), # fontColor,
 				# NSBackgroundColorAttributeName: NSColor.colorWithCalibratedRed_green_blue_alpha_( 0, .3, .8, .65 ),
