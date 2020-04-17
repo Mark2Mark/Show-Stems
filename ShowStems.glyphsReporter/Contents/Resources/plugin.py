@@ -1,4 +1,5 @@
 # encoding: utf-8
+from __future__ import division, print_function, unicode_literals
 
 ###########################################################################################################
 #
@@ -13,25 +14,32 @@
 
 ## ToDo: display the matched stem? e.g. `oH` / `nH` / ...
 
+import objc
+from GlyphsApp import *
 from GlyphsApp.plugins import *
 
-import math
+from math import tan, radians
 import traceback
-from GlyphsApp import GSLINE, GSCURVE, GSOFFCURVE, GSSHARP
-import numpy as np
+# import numpy as np
 
 class ShowVerticalStems(ReporterPlugin):
 
+	@objc.python_method
 	def settings(self):
-		self.menuName = Glyphs.localize({'en': u'Stems', 'de': u'Stämme'})
+		self.menuName = Glyphs.localize({
+			'en': 'Stems',
+			'de': 'Stämme',
+			'fr': 'les traits',
+			'es': 'astas',
+		})
 		self.keyboardShortcut = 's'
 		self.keyboardShortcutModifier = NSControlKeyMask | NSCommandKeyMask | NSAlternateKeyMask
 
-
-	def foreground(self, layer):  # def background(self, layer):
+	@objc.python_method
+	def foreground(self, layer):
 		self.verticalStems(layer)
 
-
+	@objc.python_method
 	def BoundsRect(self, NSRect):
 		x = NSRect[0][0]
 		y = NSRect[0][1]
@@ -39,7 +47,7 @@ class ShowVerticalStems(ReporterPlugin):
 		height = NSRect[1][1]
 		return x, y, width, height
 
-
+	@objc.python_method
 	def drawLine(self, color, x1, y1, x2, y2, w=1):
 		myPath = NSBezierPath.bezierPath()
 		myPath.moveToPoint_((x1, y1))
@@ -50,28 +58,23 @@ class ShowVerticalStems(ReporterPlugin):
 		NSColor.colorWithCalibratedRed_green_blue_alpha_( *color ).set()
 		myPath.stroke()
 
-
+	@objc.python_method
 	def italo(self, yPos):
 		'''	ITALIC OFFSET '''
-		offset = math.tan(math.radians(self.angle)) * self.xHeight/2
-		shift = math.tan(math.radians(self.angle)) * yPos - offset
+		offset = tan(radians(self.angle)) * self.xHeight/2
+		shift = tan(radians(self.angle)) * yPos - offset
 		return shift
 
-
+	@objc.python_method
 	def drawBadge(self, x, y, width, color):
 		height = width
-		myPath = NSBezierPath.alloc().init()
 		myRect = NSRect( ( x - width/2, y - height/2 ), ( width, height ) )
-		thisPath = NSBezierPath.bezierPathWithOvalInRect_( myRect )
-		myPath.appendBezierPath_( thisPath )
-
-		### FILL
+		myPath = NSBezierPath.bezierPathWithOvalInRect_( myRect )
 		NSColor.colorWithCalibratedRed_green_blue_alpha_( *color ).set()
 		myPath.fill()
 
-
+	@objc.python_method
 	def drawRoundedRectangleForStringAtPosition(self, thisString, center, fontsize, color=(0, .3, .8, .65) ):
-		''' Thanks to Mekkablue for this one '''
 		x, y = center
 		scaledSize = fontsize / self.getScale()
 		width = len(thisString) * scaledSize * 0.7
@@ -81,11 +84,11 @@ class ShowVerticalStems(ReporterPlugin):
 		panel.size = NSSize( width, scaledSize + rim*2 )
 		NSColor.colorWithCalibratedRed_green_blue_alpha_( *color ).set()
 		NSBezierPath.bezierPathWithRoundedRect_xRadius_yRadius_( panel, scaledSize*0.5, scaledSize*0.5 ).fill()
-		self.drawTextAtPoint(thisString, center, fontsize )
+		self.drawTextAtPoint(thisString, center, fontsize, align="center", fontColor=NSColor.whiteColor() )
 
-
+	@objc.python_method
 	def drawTriangle(self, x, y, size):
-		myPath = NSBezierPath.alloc().init()
+		myPath = NSBezierPath.bezierPath()
 		size = size / self.getScale()
 		a, b, c = 0, size, size * 2
 		myPath.moveToPoint_( (a + x, a + y - size / 2) )
@@ -97,7 +100,7 @@ class ShowVerticalStems(ReporterPlugin):
 		NSColor.colorWithCalibratedRed_green_blue_alpha_( 0.8, 0.8, 0.8, 0.8 ).set()
 		myPath.fill()
 
-
+	@objc.python_method
 	def verticalStems(self, layer):
 		try:
 			letterCase = layer.parent.subCategory
@@ -106,14 +109,14 @@ class ShowVerticalStems(ReporterPlugin):
 
 		MeasurementPositionMeasurementLine = NSUserDefaults.standardUserDefaults().floatForKey_("MeasurementPositionMeasurementLine")
 		Dimensions = {}
-		savedMeasurements = None
+		savedMeasurements = {}
+		thisFont = layer.parent.parent
+		thisMasterID = thisFont.selectedFontMaster.id
 		try:
-			thisFont = layer.parent.parent
 			Dimensions = thisFont.userData["GSDimensionPlugin.Dimensions"]
-			thisMasterID = thisFont.selectedFontMaster.id
 			savedMeasurements = Dimensions[thisMasterID]
 		except:
-			# print traceback.format_exc()
+			# print(traceback.format_exc())
 			pass
 
 		###### IMPORTANT: convert to int, because the input fields could return objc.unicode or objc.integers.
@@ -146,9 +149,9 @@ class ShowVerticalStems(ReporterPlugin):
 
 			'''	PATH '''
 			self.dashed = False
-			self.xHeight = layer.glyphMetrics()[4]
-			self.capHeight = layer.glyphMetrics()[2]
-			self.angle = layer.glyphMetrics()[5]
+			self.xHeight = layer.master.xHeight
+			self.capHeight = layer.master.capHeight
+			self.angle = layer.master.italicAngle
 
 			if letterCase == "Uppercase":
 				verticalCenter = self.capHeight
@@ -158,8 +161,8 @@ class ShowVerticalStems(ReporterPlugin):
 			### LAYER/METRIC DIMENSIONS
 			xLayerLeft = 0
 			xLayerRight = layer.width
-			yAscender = layer.glyphMetrics()[1]
-			yDescender = layer.glyphMetrics()[3]
+			yAscender = layer.master.ascender
+			yDescender = layer.master.descender
 
 			### Line from (0, 0) to (xHeight, LayerWidth)
 			# self.drawLine( 0 + self.italo(0) , 0, xLayerRight + self.italo(verticalCenter), verticalCenter)
@@ -292,7 +295,7 @@ class ShowVerticalStems(ReporterPlugin):
 					self.drawTriangle( 0, verticalCenter / 2, 6 )
 
 				except:
-					print traceback.format_exc()
+					print(traceback.format_exc())
 
 				'''
 				draw a vertical line with italic angle in the center of this distance
@@ -306,34 +309,7 @@ class ShowVerticalStems(ReporterPlugin):
 		except Exception as e:
 			self.logToConsole( "drawForegroundForLayer_: %s" % str(e) )
 
-
-	def drawTextAtPoint(self, text, textPosition, fontSize=10.0, fontColor=NSColor.blackColor(), align='center'):
-		"""
-		custom drawTextAtPoint() by Mark.
-		"""
-		try:
-
-			alignment = {
-				'topleft': 6,
-				'topcenter': 7,
-				'topright': 8,
-				'left': 3,
-				'center': 4,
-				'right': 5,
-				'bottomleft': 0,
-				'bottomcenter': 1,
-				'bottomright': 2
-				}
-
-			glyphEditView = self.controller.graphicView()
-			currentZoom = self.getScale()
-			fontAttributes = {
-				NSFontAttributeName: NSFont.labelFontOfSize_(fontSize/currentZoom),
-				NSForegroundColorAttributeName: NSColor.colorWithCalibratedRed_green_blue_alpha_( 1, 1, 1, 1 ), # fontColor,
-				# NSBackgroundColorAttributeName: NSColor.colorWithCalibratedRed_green_blue_alpha_( 0, .3, .8, .65 ),
-				}
-			displayText = NSAttributedString.alloc().initWithString_attributes_(text, fontAttributes)
-			textAlignment = alignment[align] # top left: 6, top center: 7, top right: 8, center left: 3, center center: 4, center right: 5, bottom left: 0, bottom center: 1, bottom right: 2
-			glyphEditView.drawText_atPoint_alignment_(displayText, textPosition, textAlignment)
-		except:
-			self.logError(traceback.format_exc())
+	@objc.python_method
+	def __file__(self):
+		"""Please leave this method unchanged"""
+		return __file__
